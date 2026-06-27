@@ -1,0 +1,10 @@
+/docs export-ignore
+/js/admin.ts export-ignore
+/js/forum.ts export-ignore
+/js/package.json export-ignore
+/js/tsconfig.json export-ignore
+/js/webpack.config.js export-ignore
+/js/yarn.lock export-ignore
+/js/.yarnrc.yml export-ignore
+/.gitignore export-ignore
+/.gitattributes export-ignore
