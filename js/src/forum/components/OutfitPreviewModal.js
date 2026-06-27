@@ -42,7 +42,7 @@ export default class OutfitPreviewModal extends Modal {
                 key={asset.path}
               >
                 <span className="AvatarDecorationPart-thumb">
-                  <AvatarCanvas manifest={this.attrs.manifest} decoration={this.partDecoration(asset)} compact />
+                  <AvatarCanvas manifest={this.attrs.manifest} decoration={this.partDecoration(asset)} compact staticOnly />
                 </span>
               </button>
             ))}

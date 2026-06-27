@@ -11,6 +11,7 @@ export default class AvatarCanvas extends Component {
     const defaultAvatar = manifest.defaultAvatar || this.attrs.defaultAvatar;
     const compact = !!this.attrs.compact;
     const portrait = !!this.attrs.portrait;
+    const staticOnly = !!this.attrs.staticOnly;
     const showBackground = this.attrs.showBackground ?? !compact;
     const background = colors.background || DEFAULT_COLORS.background;
 
@@ -20,7 +21,7 @@ export default class AvatarCanvas extends Component {
           {!layers.length && (defaultAvatar?.url || defaultAvatar?.path) && (
             <img
               className="AvatarDecorationCanvas-layer AvatarDecorationCanvas-base"
-              src={assetUrl(defaultAvatar, colors)}
+              src={assetUrl(defaultAvatar, colors, { staticOnly })}
               alt=""
               loading={compact ? 'lazy' : 'eager'}
               decoding="async"
@@ -30,7 +31,7 @@ export default class AvatarCanvas extends Component {
           {layers.map((asset) => (
             <img
               className="AvatarDecorationCanvas-layer"
-              src={assetUrl(asset, colors)}
+              src={assetUrl(asset, colors, { staticOnly })}
               alt=""
               loading={compact ? 'lazy' : 'eager'}
               decoding="async"

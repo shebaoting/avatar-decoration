@@ -226,7 +226,7 @@ export default class AvatarEditorPage extends Page {
 
   itemPreview(item, outfit) {
     if (outfit) {
-      const src = itemPreviewUrl(item, this.decoration.colors);
+      const src = itemPreviewUrl(item, this.decoration.colors, { staticOnly: true });
 
       if (src) {
         return <img src={src} alt="" loading="lazy" decoding="async" fetchpriority="low" />;
@@ -234,12 +234,12 @@ export default class AvatarEditorPage extends Page {
 
       const previewDecoration = this.previewDecoration('Outfits', item);
 
-      return <AvatarCanvas manifest={this.manifest} decoration={previewDecoration} compact />;
+      return <AvatarCanvas manifest={this.manifest} decoration={previewDecoration} compact staticOnly />;
     }
 
     const previewDecoration = this.previewDecoration(this.activeTab, item);
 
-    return <AvatarCanvas manifest={this.manifest} decoration={previewDecoration} compact />;
+    return <AvatarCanvas manifest={this.manifest} decoration={previewDecoration} compact staticOnly />;
   }
 
   previewDecoration(tab, item) {

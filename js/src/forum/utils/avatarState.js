@@ -197,15 +197,50 @@ function normalizeColor(key, value) {
   return null;
 }
 
-export function assetUrl(asset, colors = DEFAULT_COLORS) {
+export function assetUrl(asset, colors = DEFAULT_COLORS, options = {}) {
+  const staticOnly = !!options.staticOnly;
   const source = asset?.url || (asset?.path ? assetBaseUrl(asset.path) : '');
 
   if (!source) {
     return '';
   }
 
+  const staticSource = asset?.path ? staticAssetUrl(asset.path) : '';
+
+  if (staticOnly && staticSource) {
+    return staticSource;
+  }
+
   const url = new URL(source, window.location.origin);
   const path = asset?.path || url.searchParams.get('path') || source;
+
+  if (!/\.svg$/i.test(path)) {
+    return staticSource || url.pathname + url.search;
+  }
+
+  if (staticSource && !hasCustomAvatarColors(colors)) {
+    return staticSource;
+  }
+
+  if (staticSource && !source.includes('/flarum-avatar/asset')) {
+    return staticSource;
+  }
+
+  if (staticSource && !hasRecolorParams(colors)) {
+    return staticSource;
+  }
+
+  if (!source.includes('/flarum-avatar/asset') && asset?.path) {
+    const dynamicUrl = new URL(assetBaseUrl(asset.path), window.location.origin);
+
+    ['body', 'hair', 'eyes'].forEach((key) => {
+      if (colors[key]) {
+        dynamicUrl.searchParams.set(key, colors[key]);
+      }
+    });
+
+    return dynamicUrl.pathname + dynamicUrl.search;
+  }
 
   if (!/\.svg$/i.test(path)) {
     return url.pathname + url.search;
@@ -220,6 +255,25 @@ export function assetUrl(asset, colors = DEFAULT_COLORS) {
   return url.pathname + url.search;
 }
 
+function hasCustomAvatarColors(colors = DEFAULT_COLORS) {
+  return ['body', 'hair', 'eyes'].some((key) => colors[key] && colors[key] !== DEFAULT_COLORS[key]);
+}
+
+function hasRecolorParams(colors = DEFAULT_COLORS) {
+  return ['body', 'hair', 'eyes'].some((key) => !!colors[key]);
+}
+
+export function staticAssetUrl(path) {
+  const baseUrl = app.forum.attribute('baseUrl').replace(/\/$/, '');
+  const version = app.forum.attribute('avatarDecorationAssetVersion');
+  const safePath = String(path)
+    .split('/')
+    .map((part) => encodeURIComponent(part))
+    .join('/');
+
+  return `${baseUrl}/assets/extensions/shebaoting-avatar/avatars/${safePath}${version ? `?v=${encodeURIComponent(version)}` : ''}`;
+}
+
 function assetBaseUrl(path) {
   const version = app.forum.attribute('avatarDecorationAssetVersion');
   const query = new URLSearchParams({ path });
@@ -231,14 +285,14 @@ function assetBaseUrl(path) {
   return `${app.forum.attribute('baseUrl').replace(/\/$/, '')}/flarum-avatar/asset?${query.toString()}`;
 }
 
-export function itemPreviewUrl(item, colors = DEFAULT_COLORS) {
+export function itemPreviewUrl(item, colors = DEFAULT_COLORS, options = {}) {
   if (item?.previewUrl || item?.preview) {
-    return assetUrl({ path: item.preview, url: item.previewUrl }, colors);
+    return assetUrl({ path: item.preview, url: item.previewUrl }, colors, options);
   }
 
   const first = firstAsset(item);
 
-  return first ? assetUrl(first, colors) : '';
+  return first ? assetUrl(first, colors, options) : '';
 }
 
 export function defaultLayers(manifest = {}) {

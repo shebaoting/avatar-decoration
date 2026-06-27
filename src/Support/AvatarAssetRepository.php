@@ -8,7 +8,7 @@ use Illuminate\Support\Arr;
 
 class AvatarAssetRepository
 {
-    public const VERSION = 2;
+    public const VERSION = 3;
 
     public const DEFAULT_FILE = 'reddit-default-avatar-white.svg';
 
