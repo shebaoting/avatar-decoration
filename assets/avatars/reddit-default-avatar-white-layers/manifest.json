@@ -1,0 +1,48 @@
+{
+  "sourceFile": "/Users/zhebaoting/Sites/wyz/output/reddit-avatar-svgs/reddit-default-avatar-white.svg",
+  "generatedAt": "2026-06-27T06:17:00.710Z",
+  "description": "Layered white default Reddit avatar split from reddit-default-avatar-white.svg. Compose in ascending layer order.",
+  "layerCount": 4,
+  "layers": [
+    {
+      "index": 1,
+      "name": "body_lower",
+      "file": "01_body_lower.svg",
+      "path": "/Users/zhebaoting/Sites/wyz/output/reddit-avatar-svgs/reddit-default-avatar-white-layers/01_body_lower.svg",
+      "bytes": 9492,
+      "whiteCount": 5,
+      "hasGreen": false,
+      "hasYellowFallback": false
+    },
+    {
+      "index": 2,
+      "name": "body_upper_arms",
+      "file": "02_body_upper_arms.svg",
+      "path": "/Users/zhebaoting/Sites/wyz/output/reddit-avatar-svgs/reddit-default-avatar-white-layers/02_body_upper_arms.svg",
+      "bytes": 8042,
+      "whiteCount": 5,
+      "hasGreen": false,
+      "hasYellowFallback": false
+    },
+    {
+      "index": 3,
+      "name": "head_and_antenna",
+      "file": "03_head_and_antenna.svg",
+      "path": "/Users/zhebaoting/Sites/wyz/output/reddit-avatar-svgs/reddit-default-avatar-white-layers/03_head_and_antenna.svg",
+      "bytes": 20969,
+      "whiteCount": 4,
+      "hasGreen": false,
+      "hasYellowFallback": false
+    },
+    {
+      "index": 4,
+      "name": "eyes",
+      "file": "04_eyes.svg",
+      "path": "/Users/zhebaoting/Sites/wyz/output/reddit-avatar-svgs/reddit-default-avatar-white-layers/04_eyes.svg",
+      "bytes": 3314,
+      "whiteCount": 0,
+      "hasGreen": false,
+      "hasYellowFallback": false
+    }
+  ]
+}

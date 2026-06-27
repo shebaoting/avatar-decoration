@@ -1,0 +1,503 @@
+.AvatarDecorationPage {
+  min-height: calc(100vh - 52px);
+  background: #f6f7f8;
+}
+
+.AvatarDecorationContainer {
+  padding-top: 20px;
+  padding-bottom: 34px;
+}
+
+.AvatarDecorationShell {
+  display: grid;
+  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
+  min-height: calc(100vh - 106px);
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f6f7f8;
+}
+
+.AvatarDecorationPreviewPane {
+  background: #fff;
+  border-right: 1px solid #e2e8f0;
+}
+
+.AvatarDecorationPreviewSticky {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: calc(100vh - 106px);
+  padding: 18px;
+}
+
+.AvatarDecorationPreviewHeader {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  align-items: center;
+  gap: 10px;
+
+  h1 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.25;
+    font-weight: 700;
+  }
+}
+
+.AvatarDecorationCanvas {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 360px;
+  max-height: 100%;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.AvatarDecorationCanvas-stage {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 380 / 600;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.AvatarDecorationPreviewSticky > .AvatarDecorationCanvas {
+  max-width: 220px;
+}
+
+.AvatarDecorationCanvas-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.AvatarDecorationCanvas-base {
+  z-index: 0;
+}
+
+.AvatarDecorationCanvas--compact {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+
+  .AvatarDecorationCanvas-stage {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+}
+
+.AvatarDecorationCanvas--portrait {
+  .AvatarDecorationCanvas-layer {
+    inset: 0 auto auto -15%;
+    width: 130%;
+    height: 130%;
+  }
+}
+
+.AvatarDecorationColorPanel {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.AvatarDecorationColorRow {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.AvatarDecorationSwatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.AvatarDecorationSwatch {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #cbd5e1;
+  cursor: pointer;
+
+  &.is-active {
+    box-shadow: 0 0 0 2px #ff4500;
+  }
+}
+
+.AvatarDecorationColorRow--background {
+  align-items: start;
+  grid-template-columns: 1fr;
+  gap: 6px;
+
+  .AvatarDecorationSwatches {
+    gap: 5px;
+  }
+
+  .AvatarDecorationSwatch {
+    width: 24px;
+    height: 20px;
+    border-radius: 7px;
+  }
+}
+
+.AvatarDecorationActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.AvatarDecorationWardrobe {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 20px 22px 34px;
+}
+
+.AvatarDecorationTabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 0 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.AvatarDecorationTab {
+  flex: 0 0 auto;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #475569;
+  font-weight: 700;
+  cursor: pointer;
+
+  &.is-active {
+    background: #111827;
+    color: #fff;
+  }
+}
+
+.AvatarDecorationWardrobeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 0;
+
+  h2 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.25;
+  }
+}
+
+.AvatarDecorationGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 112px);
+  justify-content: start;
+  gap: 10px;
+}
+
+.AvatarDecorationGrid--compact {
+  grid-template-columns: repeat(auto-fill, 72px);
+  justify-content: start;
+  gap: 8px;
+
+  .AvatarDecorationItemCard {
+    border-radius: 6px;
+  }
+
+  .AvatarDecorationItemPreview {
+    border-radius: 4px;
+  }
+}
+
+.AvatarDecorationItemCard {
+  display: grid;
+  grid-template-rows: 1fr;
+  aspect-ratio: 3 / 4;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: #ff4500;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    transform: translateY(-1px);
+  }
+
+  &.is-selected {
+    border-color: #ff4500;
+    box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.18);
+  }
+}
+
+.AvatarDecorationItemPreview {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #f1f5f9;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.AvatarDecorationItemName {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: #334155;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  text-overflow: ellipsis;
+}
+
+.AvatarDecorationOutfitSections {
+  display: grid;
+  gap: 24px;
+}
+
+.AvatarDecorationOutfitSection {
+  h3 {
+    margin: 0 0 12px;
+    color: #334155;
+    font-size: 15px;
+    line-height: 1.3;
+    font-weight: 800;
+  }
+}
+
+.AvatarDecorationOutfitModal-body {
+  display: grid;
+  grid-template-columns: minmax(180px, 280px) minmax(0, 1fr);
+  gap: 18px;
+}
+
+.AvatarDecorationOutfitModal-parts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  align-content: start;
+  gap: 8px;
+  max-height: 430px;
+  overflow: auto;
+}
+
+.AvatarDecorationPart {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: #ff4500;
+  }
+
+  &.is-active {
+    border-color: #ff4500;
+    box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.18);
+  }
+}
+
+.AvatarDecorationPart-thumb {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #f1f5f9;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.AvatarDecorationPart-meta {
+  min-width: 0;
+
+  strong,
+  small {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  strong {
+    color: #111827;
+    font-size: 13px;
+  }
+
+  small {
+    color: #64748b;
+    font-size: 11px;
+  }
+}
+
+.AvatarDecorationOutfitModal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.AvatarDecorationAvatar {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #fff;
+  vertical-align: middle;
+
+  .AvatarDecorationCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+}
+
+.AvatarDecorationAvatarEditor {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover,
+  &:focus,
+  &:focus-visible {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &:focus .Dropdown-toggle,
+  &:focus-visible .Dropdown-toggle {
+    opacity: 1;
+  }
+
+  .AvatarDecorationAvatarEditor-toggle {
+    pointer-events: none;
+  }
+}
+
+.AvatarDecorationSignedOut {
+  display: grid;
+  place-items: center;
+  gap: 14px;
+  min-height: 360px;
+  text-align: center;
+
+  h2 {
+    margin: 0;
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 900px) {
+  .AvatarDecorationShell {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .AvatarDecorationPreviewPane {
+    border-right: 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .AvatarDecorationPreviewSticky {
+    position: relative;
+    min-height: 0;
+  }
+
+  .AvatarDecorationPreviewSticky .AvatarDecorationCanvas {
+    max-width: 220px;
+  }
+
+  .AvatarDecorationColorPanel {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .AvatarDecorationColorRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .AvatarDecorationContainer {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .AvatarDecorationShell {
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+  }
+
+  .AvatarDecorationWardrobe {
+    padding: 14px;
+  }
+
+  .AvatarDecorationGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .AvatarDecorationGrid--compact {
+    grid-template-columns: repeat(auto-fill, 64px);
+  }
+
+  .AvatarDecorationItemCard {
+    grid-template-rows: 1fr;
+  }
+
+  .AvatarDecorationOutfitModal-body {
+    grid-template-columns: 1fr;
+  }
+
+  .AvatarDecorationColorPanel {
+    grid-template-columns: 1fr;
+  }
+}
