@@ -10,7 +10,6 @@ import {
   BACKGROUND_COLORS,
   decorationFromUser,
   emptyDecoration,
-  flattenOutfitSections,
   isSelected,
   itemPreviewUrl,
   normalizeDecoration,
@@ -19,6 +18,10 @@ import {
   setSelection,
   TAB_ORDER,
 } from '../utils/avatarState';
+
+const INITIAL_ITEM_LIMIT = 48;
+const INITIAL_OUTFIT_LIMIT = 24;
+const ITEM_LIMIT_STEP = 48;
 
 export default class AvatarEditorPage extends Page {
   oninit(vnode) {
@@ -30,6 +33,7 @@ export default class AvatarEditorPage extends Page {
     this.manifest = null;
     this.activeTab = 'Outfits';
     this.decoration = app.session.user ? decorationFromUser(app.session.user) : emptyDecoration();
+    this.visibleLimits = {};
 
     this.loadManifest();
   }
@@ -174,32 +178,50 @@ export default class AvatarEditorPage extends Page {
         {(tab.items || []).map((section) => (
           <section className="AvatarDecorationOutfitSection" key={section.key}>
             <h3>{section.label}</h3>
-            {this.itemGrid(section.items || [], true)}
+            {this.itemGrid(section.items || [], true, section.key)}
           </section>
         ))}
       </div>
     );
   }
 
-  itemGrid(items, outfit = false) {
+  itemGrid(items, outfit = false, sectionKey = '') {
     const tab = this.activeTab;
+    const gridKey = outfit ? `${tab}:${sectionKey}` : tab;
+    const limit = this.visibleLimit(gridKey, outfit);
+    const visibleItems = items.slice(0, limit);
+    const hasMore = limit < items.length;
 
     return (
       <div className={classList('AvatarDecorationGrid', !outfit && 'AvatarDecorationGrid--compact')}>
-        {items.map((item) => (
-            <button
-              type="button"
-              className={classList('AvatarDecorationItemCard', isSelected(this.decoration, tab, item) && 'is-selected')}
-              onclick={() => (outfit ? this.previewOutfit(item) : this.selectItem(tab, item))}
-              aria-label={item.name}
-              aria-pressed={isSelected(this.decoration, tab, item) ? 'true' : 'false'}
-              key={item.id}
-            >
-              <span className="AvatarDecorationItemPreview">{this.itemPreview(item, outfit)}</span>
-            </button>
-          ))}
-        </div>
+        {visibleItems.map((item) => (
+          <button
+            type="button"
+            className={classList('AvatarDecorationItemCard', isSelected(this.decoration, tab, item) && 'is-selected')}
+            onclick={() => (outfit ? this.previewOutfit(item) : this.selectItem(tab, item))}
+            aria-label={item.name}
+            aria-pressed={isSelected(this.decoration, tab, item) ? 'true' : 'false'}
+            key={item.id}
+          >
+            <span className="AvatarDecorationItemPreview">{this.itemPreview(item, outfit)}</span>
+          </button>
+        ))}
+
+        {hasMore && (
+          <button type="button" className="Button AvatarDecorationLoadMore" onclick={() => this.showMore(gridKey, outfit)}>
+            {app.translator.trans('shebaoting-avatar.forum.editor.load_more')}
+          </button>
+        )}
+      </div>
     );
+  }
+
+  visibleLimit(key, outfit) {
+    return this.visibleLimits[key] || (outfit ? INITIAL_OUTFIT_LIMIT : INITIAL_ITEM_LIMIT);
+  }
+
+  showMore(key, outfit) {
+    this.visibleLimits[key] = this.visibleLimit(key, outfit) + ITEM_LIMIT_STEP;
   }
 
   itemPreview(item, outfit) {
@@ -207,7 +229,7 @@ export default class AvatarEditorPage extends Page {
       const src = itemPreviewUrl(item, this.decoration.colors);
 
       if (src) {
-        return <img src={src} alt="" loading="lazy" />;
+        return <img src={src} alt="" loading="lazy" decoding="async" fetchpriority="low" />;
       }
 
       const previewDecoration = this.previewDecoration('Outfits', item);

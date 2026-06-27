@@ -28,6 +28,21 @@ class AvatarAssetController implements RequestHandlerInterface
         }
 
         $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        $mtime = (int) filemtime($file);
+        $size = (int) filesize($file);
+        $etag = '"'.sha1($path.'|'.$mtime.'|'.$size.'|'.$request->getUri()->getQuery()).'"';
+        $headers = [
+            'Content-Type' => $this->mimeType($extension),
+            'Cache-Control' => 'public, max-age=31536000, immutable',
+            'ETag' => $etag,
+            'Last-Modified' => gmdate('D, d M Y H:i:s', $mtime).' GMT',
+            'X-Content-Type-Options' => 'nosniff',
+        ];
+
+        if ($request->getHeaderLine('If-None-Match') === $etag) {
+            return new Response('php://memory', 304, $headers);
+        }
+
         $body = file_get_contents($file);
 
         if ($body === false) {
@@ -38,11 +53,9 @@ class AvatarAssetController implements RequestHandlerInterface
             $body = $this->recolorSvg($body, $query);
         }
 
-        $response = new Response('php://temp', 200, [
-            'Content-Type' => $this->mimeType($extension),
-            'Cache-Control' => 'public, max-age=31536000, immutable',
-            'X-Content-Type-Options' => 'nosniff',
-        ]);
+        $headers['Content-Length'] = (string) strlen($body);
+
+        $response = new Response('php://temp', 200, $headers);
 
         $response->getBody()->write($body);
         $response->getBody()->rewind();
@@ -60,6 +73,10 @@ class AvatarAssetController implements RequestHandlerInterface
 
         foreach ($colors as $class => $color) {
             if (! $color) {
+                continue;
+            }
+
+            if (! str_contains($svg, $class)) {
                 continue;
             }
 

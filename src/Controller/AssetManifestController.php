@@ -25,6 +25,9 @@ class AssetManifestController implements RequestHandlerInterface
                 'id' => 'manifest',
                 'attributes' => $this->assets->manifest($this->url->to('forum')->base()),
             ],
+        ], 200, [
+            'Cache-Control' => 'public, max-age=300, stale-while-revalidate=86400',
+            'X-Content-Type-Options' => 'nosniff',
         ]);
     }
 }

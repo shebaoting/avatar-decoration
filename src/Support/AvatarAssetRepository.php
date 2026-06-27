@@ -8,7 +8,7 @@ use Illuminate\Support\Arr;
 
 class AvatarAssetRepository
 {
-    public const VERSION = 1;
+    public const VERSION = 2;
 
     public const DEFAULT_FILE = 'reddit-default-avatar-white.svg';
 
@@ -207,10 +207,10 @@ class AvatarAssetRepository
         ];
     }
 
-    public function manifest(string $baseUrl): array
+    public function manifest(string $_baseUrl): array
     {
         if (self::$manifest !== null) {
-            return $this->withBaseUrl(self::$manifest, $baseUrl);
+            return self::$manifest;
         }
 
         $tabs = [];
@@ -244,7 +244,7 @@ class AvatarAssetRepository
             ],
         ];
 
-        return $this->withBaseUrl(self::$manifest, $baseUrl);
+        return self::$manifest;
     }
 
     public function assetPath(string $relativePath): ?string
@@ -273,32 +273,7 @@ class AvatarAssetRepository
             return self::$assetVersion;
         }
 
-        $version = self::VERSION;
-        $root = realpath($this->assetsPath);
-
-        if (! $root) {
-            return self::$assetVersion = $version;
-        }
-
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS)
-        );
-
-        foreach ($files as $file) {
-            if (! $file->isFile()) {
-                continue;
-            }
-
-            $extension = strtolower($file->getExtension());
-
-            if (! in_array($extension, ['svg', 'png', 'webp', 'jpg', 'jpeg'], true)) {
-                continue;
-            }
-
-            $version = max($version, (int) $file->getMTime());
-        }
-
-        return self::$assetVersion = $version;
+        return self::$assetVersion = self::VERSION;
     }
 
     public static function isSafeRelativePath(string $path): bool
@@ -498,55 +473,6 @@ class AvatarAssetRepository
     private function relativePath(string $path): string
     {
         return ltrim(str_replace('\\', '/', substr($path, strlen($this->assetsPath))), '/');
-    }
-
-    private function withBaseUrl(array $manifest, string $baseUrl): array
-    {
-        $baseUrl = rtrim($baseUrl, '/');
-
-        $addUrl = function (array &$item) use (&$addUrl, $baseUrl) {
-            if (isset($item['path']) && is_string($item['path'])) {
-                $item['url'] = $this->assetUrl($baseUrl, $item['path']);
-            }
-
-            if (isset($item['preview']) && is_string($item['preview'])) {
-                $item['previewUrl'] = $this->assetUrl($baseUrl, $item['preview']);
-            }
-
-            if (isset($item['assets']) && is_array($item['assets'])) {
-                foreach ($item['assets'] as &$asset) {
-                    $addUrl($asset);
-                }
-            }
-
-            if (isset($item['items']) && is_array($item['items'])) {
-                foreach ($item['items'] as &$child) {
-                    $addUrl($child);
-                }
-            }
-        };
-
-        $addUrl($manifest['defaultAvatar']);
-
-        foreach ($manifest['defaultLayers'] as &$layer) {
-            $addUrl($layer);
-        }
-
-        foreach ($manifest['tabs'] as &$tab) {
-            foreach ($tab['items'] as &$item) {
-                $addUrl($item);
-            }
-        }
-
-        return $manifest;
-    }
-
-    private function assetUrl(string $baseUrl, string $path): string
-    {
-        $file = $this->assetPath($path);
-        $version = $file ? (string) filemtime($file) : (string) self::VERSION;
-
-        return $baseUrl.'/flarum-avatar/asset?path='.rawurlencode($path).'&v='.$version;
     }
 
     private function tabLabel(string $tab): string

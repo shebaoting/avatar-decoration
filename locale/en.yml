@@ -13,6 +13,7 @@ shebaoting-avatar:
       saved: Avatar saved.
       save_error: Could not save avatar.
       load_error: Could not load avatar assets.
+      load_more: Load more
       reset: Reset
       clear: Clear
       cancel: Cancel

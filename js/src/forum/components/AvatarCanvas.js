@@ -17,13 +17,24 @@ export default class AvatarCanvas extends Component {
     return (
       <div className={classList('AvatarDecorationCanvas', compact && 'AvatarDecorationCanvas--compact', portrait && 'AvatarDecorationCanvas--portrait', this.attrs.className)}>
         <div className="AvatarDecorationCanvas-stage" style={showBackground ? { background } : null}>
-          {!layers.length && defaultAvatar?.url && <img className="AvatarDecorationCanvas-layer AvatarDecorationCanvas-base" src={assetUrl(defaultAvatar, colors)} alt="" />}
+          {!layers.length && (defaultAvatar?.url || defaultAvatar?.path) && (
+            <img
+              className="AvatarDecorationCanvas-layer AvatarDecorationCanvas-base"
+              src={assetUrl(defaultAvatar, colors)}
+              alt=""
+              loading={compact ? 'lazy' : 'eager'}
+              decoding="async"
+              fetchpriority={compact ? 'low' : 'auto'}
+            />
+          )}
           {layers.map((asset) => (
             <img
               className="AvatarDecorationCanvas-layer"
               src={assetUrl(asset, colors)}
               alt=""
               loading={compact ? 'lazy' : 'eager'}
+              decoding="async"
+              fetchpriority={compact ? 'low' : 'auto'}
               key={`${asset.slot}-${asset.path}-${asset.layer}`}
             />
           ))}
