@@ -19,9 +19,9 @@ import {
   TAB_ORDER,
 } from '../utils/avatarState';
 
-const INITIAL_ITEM_LIMIT = 48;
-const INITIAL_OUTFIT_LIMIT = 24;
-const ITEM_LIMIT_STEP = 48;
+const INITIAL_ITEM_LIMIT = 144;
+const INITIAL_OUTFIT_LIMIT = 96;
+const ITEM_LIMIT_STEP = 144;
 
 export default class AvatarEditorPage extends Page {
   oninit(vnode) {
